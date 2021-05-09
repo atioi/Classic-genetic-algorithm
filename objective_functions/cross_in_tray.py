@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
+import pylab
 
 
 def cross_in_tray(XY):
@@ -27,3 +28,5 @@ def plot(X: np.array, Y: np.array):
     Z = cross_in_tray([X, Y])
     ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
     plt.show()
+
+
