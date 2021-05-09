@@ -1,49 +1,35 @@
-from genetics.population import generate_population, evaluate_population, best_individual
-from objective_functions.cross_in_tray import cross_in_tray
-from selection.crossover import cross
-from selection.mutation import mutate
-from selection.roulette import roulette
-from tests.roulette_tests import roulette_test
 import numpy as np
-N = 2
+from genetics.evolve import evolve
+from objective_functions.cross_in_tray import cross_in_tray
+import matplotlib.pyplot as plt
 
+pop_size = 60
+pk = 0.7
+pm = 0.01
+generations = 200
+dx = 1e-10
 
-roulette_test()
+result = evolve(cross_in_tray, pop_size, pk, pm, generations, dx)
 
-# print(np.max(np.array([2,3,4,1,5])))
-#
-# def evolve(object_function, population_size, cross_probability, mutation_probability, generations, code_precision):
-#     """
-#     This function implements classic genetic algorithm
-#     :param object_function: Object function that will be used in algorithm
-#     :param population_size: The number of individuals
-#     :param cross_probability: The number between 0 and 1
-#     :param mutation_probability: The number between 0 and 1
-#     :param generations: Number of generation will be created in during execution
-#     :param code_precision: For binary coding (look at genetics.individual)
-#     :return:
-#     """
-#     list_best = []
-#     list_mean = []
-#
-#     # Started population:
-#     population = generate_population(population_size, 10)
-#     evaluated_population = evaluate_population(object_function, population, N, 5, 1, code_precision)
-#
-#     for i in range(0, generations):
-#         # Roulette selection:
-#         population = roulette(population, evaluated_population)
-#         # New population after crossing
-#         population = cross(population, cross_probability)
-#         # New population after muting
-#         population = mutate(population, mutation_probability)
-#
-#         evaluated_population = evaluate_population(object_function, population, N, 5, 1, code_precision)
-#         best = best_individual(population, evaluated_population)
-#
-#         list_best.append(best['value'])
-#         list_mean.append(sum(evaluated_population) / len(evaluated_population))
-#
-#
-# evolve(cross_in_tray, 5, 0.4, 0.6, [], 0.06451612903225806)
+# Statystki:
 
+list_mean = result['Average eval in generation']
+list_best_generations = result['List of the best in all populations']
+list_best = result['List of the best']
+
+fig, axs = plt.subplots(3)
+
+fig.set_figheight(10)
+fig.set_figwidth(10)
+
+x = np.arange(0, generations + 1)
+axs[0].plot(x, list_mean, 'o')
+axs[0].set_title('Average eval in generation')
+
+axs[1].set_title('List of the best in all populations')
+axs[1].plot(x, list_best_generations, 'o')
+
+axs[2].set_title('List of the best')
+axs[2].plot(x, list_best, 'o')
+
+plt.show()
